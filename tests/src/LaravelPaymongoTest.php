@@ -26,6 +26,8 @@ it('should_throw_paymongo_missing_key_exception_when_api_keys_are_not_set', func
 })->throws(PaymongoMissingKeyException::class);
 
 it('it_should_create_a_source_resource_on_a_successful_response', function () {
+    config(['paymongo.public_key' => faker()->uuid]);
+    config(['paymongo.secret_key' => faker()->uuid]);
     $uuid = faker()->uuid;
     $failedUrl = faker()->url;
     $successUrl = faker()->url;
