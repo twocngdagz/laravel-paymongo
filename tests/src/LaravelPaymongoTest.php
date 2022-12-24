@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
+use function Pest\Faker\faker;
 use Twocngdagz\LaravelPaymongo\DataTransferObjects\Source\Request\RequestBodyData;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
-use function Pest\Faker\faker;
-    
+
 it('should_throw_paymongo_missing_key_exception_when_api_keys_are_not_set', function () {
     config(['paymongo.public_key' => null]);
     config(['paymongo.secret_key' => null]);
@@ -18,9 +18,9 @@ it('should_throw_paymongo_missing_key_exception_when_api_keys_are_not_set', func
                 'redirect' => [
                     'success' => 'http://demo-store.test/hub',
                     'failed' => 'http://demo-store.test/hub',
-                ]
-            ]
-        ]
+                ],
+            ],
+        ],
     ]);
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoMissingKeyException::class);
@@ -31,9 +31,9 @@ it('it_should_create_a_source_resource_on_a_successful_response', function () {
     $successUrl = faker()->url;
     $baseUrl = faker()->url;
     $response = [
-        'data' =>  [
+        'data' => [
             'id' => $uuid,
-            'type' => "source",
+            'type' => 'source',
             'attributes' => [
                 'amount' => 10000,
                 'billing' => null,
@@ -51,11 +51,11 @@ it('it_should_create_a_source_resource_on_a_successful_response', function () {
                 'metadata' => null,
                 'created_at' => now()->timestamp,
                 'updated_at' => now()->timestamp,
-            ]
-        ]
+            ],
+        ],
     ];
     Http::fake([
-        '*' => Http::response($response, 200)
+        '*' => Http::response($response, 200),
     ]);
     $body = new RequestBodyData([
         'data' => [
@@ -66,15 +66,12 @@ it('it_should_create_a_source_resource_on_a_successful_response', function () {
                 'redirect' => [
                     'success' => 'http://demo-store.test/hub',
                     'failed' => 'http://demo-store.test/hub',
-                ]
-            ]
-        ]
+                ],
+            ],
+        ],
     ]);
     $responseData = LaravelPaymongo::createSource($body);
     $this->assertEquals($responseData->data->attributes->redirect->success, $successUrl);
     $this->assertEquals($responseData->data->attributes->redirect->failed, $failedUrl);
     $this->assertEquals($responseData->data->id, $uuid);
-
 });
-
-

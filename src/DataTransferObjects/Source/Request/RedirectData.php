@@ -6,6 +6,7 @@ use Spatie\DataTransferObject\DataTransferObject;
 
 class RedirectData extends DataTransferObject
 {
-   public string $success;
-   public string $failed;
+    public string $success;
+
+    public string $failed;
 }

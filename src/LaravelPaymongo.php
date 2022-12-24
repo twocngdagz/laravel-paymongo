@@ -10,7 +10,9 @@ use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 class LaravelPaymongo
 {
     protected string $paymongoUrl = 'https://api.paymongo.com/v1/';
+
     protected ?string $publicKey = null;
+
     protected ?string $secretKey = null;
 
     public function init()
@@ -25,7 +27,6 @@ class LaravelPaymongo
 
     public function createSource(RequestBodyData $body): ResponseData
     {
-
         $path = 'sources';
         $this->init();
         $response = Http::withHeaders([
@@ -33,7 +34,7 @@ class LaravelPaymongo
             'content-type' => 'application/json',
         ])
         ->withBasicAuth($this->publicKey, '')
-        ->post($this->paymongoUrl . $path, $body->toArray());
+        ->post($this->paymongoUrl.$path, $body->toArray());
 
         return new ResponseData($response->json());
     }
