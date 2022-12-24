@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "twocngdagz/laravel-paymongo",
+    "description": "Paymongo Laravel Integration",
     "keywords": [
-        ":vendor_name",
+        "twocngdagz",
         "laravel",
-        ":package_slug"
+        "laravel-paymongo"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/twocngdagz/laravel-paymongo",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Mederic Roy Beldia",
+            "email": "twocngdagz@yahoo.com",
             "role": "Developer"
         }
     ],
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Twocngdagz\\LaravelPaymongo\\": "src",
+            "Twocngdagz\\LaravelPaymongo\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Twocngdagz\\LaravelPaymongo\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -61,10 +61,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Twocngdagz\\LaravelPaymongo\\LaravelPaymongoServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelPaymongo": "Twocngdagz\\LaravelPaymongo\\Facades\\LaravelPaymongo"
             }
         }
     },

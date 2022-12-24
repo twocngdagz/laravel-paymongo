@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Twocngdagz\LaravelPaymongo\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelPaymongoCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-paymongo';
 
     public $description = 'My command';
 
