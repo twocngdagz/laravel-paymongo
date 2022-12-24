@@ -73,7 +73,7 @@ it('it_should_create_a_source_resource_on_a_successful_response', function () {
         ],
     ]);
     $responseData = LaravelPaymongo::createSource($body);
-    $this->assertEquals($responseData->data->attributes->redirect->success, $successUrl);
-    $this->assertEquals($responseData->data->attributes->redirect->failed, $failedUrl);
-    $this->assertEquals($responseData->data->id, $uuid);
+    expect($responseData->data->attributes->redirect->success)->toBe($successUrl);
+    expect($responseData->data->attributes->redirect->failed)->toBe($failedUrl);
+    expect($responseData->data->id)->toBe($uuid);
 });
