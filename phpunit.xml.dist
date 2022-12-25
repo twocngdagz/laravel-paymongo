@@ -36,4 +36,9 @@
     <logging>
         <junit outputFile="build/report.junit.xml"/>
     </logging>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="PAYMONGO_PUBLIC_KEY" value="pk_test_sSSAvu69SXGZAr2VUUin53xx"/>
+        <env name="PAYMONGO_SECRET_KEY" value="sk_test_xj7jrcbdD5SdQkfKkLT1Xczt"/>
+    </php>
 </phpunit>
