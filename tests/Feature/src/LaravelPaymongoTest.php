@@ -120,12 +120,12 @@ it('should_create_webhook_to_paymongo', function () {
     expect($response->data->type)->toBe('webhook');
 });
 
-it('should_return_all_registered_webhook_on_paymongo', function() {
-    $id = 'hook_' . faker()->uuid;
-    $secretKey = 'whsk_' . faker()->uuid;
+it('should_return_all_registered_webhook_on_paymongo', function () {
+    $id = 'hook_'.faker()->uuid;
+    $secretKey = 'whsk_'.faker()->uuid;
 
     $response = [
-        'data' =>  [
+        'data' => [
             [
                 'id' => $id,
                 'type' => 'webhook',
@@ -135,14 +135,14 @@ it('should_return_all_registered_webhook_on_paymongo', function() {
                     'status' => 'enabled',
                     'url' => faker()->url,
                     'events' => [
-                        'payment.paid'
+                        'payment.paid',
                     ],
                     'created_at' => now()->timestamp,
-                    'updated_at' => now()->timestamp
-                ]
+                    'updated_at' => now()->timestamp,
+                ],
             ],
             [
-                'id' => 'hook_' . faker()->uuid,
+                'id' => 'hook_'.faker()->uuid,
                 'type' => 'webhook',
                 'attributes' => [
                     'livemode' => false,
@@ -150,18 +150,18 @@ it('should_return_all_registered_webhook_on_paymongo', function() {
                     'status' => 'enabled',
                     'url' => faker()->url,
                     'events' => [
-                        "source.chargeable"
+                        'source.chargeable',
                     ],
-                    'created_at' =>  now()->timestamp,
-                    'updated_at' =>  now()->timestamp,
-                ]
-            ]
-        ]
+                    'created_at' => now()->timestamp,
+                    'updated_at' => now()->timestamp,
+                ],
+            ],
+        ],
     ];
     Http::fake([
         '*' => Http::response($response, 200),
     ]);
-    $response  = LaravelPaymongo::listWebhooks();
+    $response = LaravelPaymongo::listWebhooks();
 
     expect($response->data->first()->id)->toBe($id);
     expect($response->data->first()->attributes->secret_key)->toBe($secretKey);

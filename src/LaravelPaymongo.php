@@ -67,6 +67,7 @@ class LaravelPaymongo
         ->withBasicAuth($this->secretKey, '')
         ->get($this->paymongoUrl.$path, []);
         dump($response->json());
+
         return ResponseData::from($response->json());
     }
 }
