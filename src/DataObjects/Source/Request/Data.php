@@ -1,14 +1,12 @@
 <?php
 
-namespace Twocngdagz\LaravelPaymongo\DataTransferObjects\Source\Response;
+namespace Twocngdagz\LaravelPaymongo\DataObjects\Source\Request;
 
 use Spatie\LaravelData\Data as SpatieData;
 
 class Data extends SpatieData
 {
     public function __construct(
-        public string $id,
-        public string $type,
         public AttributesData $attributes
     ) {
     }

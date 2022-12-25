@@ -1,6 +1,6 @@
 <?php
 
-namespace Twocngdagz\LaravelPaymongo\DataTransferObjects\Source\Request;
+namespace Twocngdagz\LaravelPaymongo\DataObjects\Source\Request;
 
 use Spatie\LaravelData\Data as SpatieData;
 

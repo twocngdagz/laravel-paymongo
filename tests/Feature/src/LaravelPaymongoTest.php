@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Http;
 use function Pest\Faker\faker;
-use Twocngdagz\LaravelPaymongo\DataTransferObjects\Source\Request\RequestBodyData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
 
