@@ -36,6 +36,6 @@ class LaravelPaymongo
         ->withBasicAuth($this->publicKey, '')
         ->post($this->paymongoUrl.$path, $body->toArray());
 
-        return new ResponseData($response->json());
+        return ResponseData::from($response->json());
     }
 }

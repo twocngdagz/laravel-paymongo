@@ -9,7 +9,7 @@ use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
 it('should_throw_paymongo_missing_key_exception_when_api_keys_are_not_set', function () {
     config(['paymongo.public_key' => null]);
     config(['paymongo.secret_key' => null]);
-    $body = new RequestBodyData([
+    $body = RequestBodyData::from([
         'data' => [
             'attributes' => [
                 'amount' => 10000,
@@ -59,7 +59,7 @@ it('it_should_create_a_source_resource_on_a_successful_response', function () {
     Http::fake([
         '*' => Http::response($response, 200),
     ]);
-    $body = new RequestBodyData([
+    $body = RequestBodyData::from([
         'data' => [
             'attributes' => [
                 'amount' => 10000,

@@ -4,6 +4,7 @@ namespace Twocngdagz\LaravelPaymongo\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\LaravelData\LaravelDataServiceProvider;
 use Twocngdagz\LaravelPaymongo\LaravelPaymongoServiceProvider;
 
 class TestCase extends Orchestra
@@ -21,6 +22,7 @@ class TestCase extends Orchestra
     {
         return [
             LaravelPaymongoServiceProvider::class,
+            LaravelDataServiceProvider::class,
         ];
     }
 

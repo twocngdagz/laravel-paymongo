@@ -2,9 +2,12 @@
 
 namespace Twocngdagz\LaravelPaymongo\DataTransferObjects\Source\Request;
 
-use Spatie\DataTransferObject\DataTransferObject;
+use Spatie\LaravelData\Data as SpatieData;
 
-class RequestBodyData extends DataTransferObject
+class RequestBodyData extends SpatieData
 {
-    public Data $data;
+    public function __construct(
+        public Data $data
+    ) {
+    }
 }

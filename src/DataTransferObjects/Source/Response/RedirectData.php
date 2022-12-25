@@ -2,13 +2,14 @@
 
 namespace Twocngdagz\LaravelPaymongo\DataTransferObjects\Source\Response;
 
-use Spatie\DataTransferObject\DataTransferObject;
+use Spatie\LaravelData\Data as SpatieData;
 
-class RedirectData extends DataTransferObject
+class RedirectData extends SpatieData
 {
-    public string $checkout_url;
-
-    public string $failed;
-
-    public string $success;
+    public function __construct(
+        public string $checkout_url,
+        public string $failed,
+        public string $success
+    ) {
+    }
 }

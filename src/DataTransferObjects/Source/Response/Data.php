@@ -2,13 +2,14 @@
 
 namespace Twocngdagz\LaravelPaymongo\DataTransferObjects\Source\Response;
 
-use Spatie\DataTransferObject\DataTransferObject;
+use Spatie\LaravelData\Data as SpatieData;
 
-class Data extends DataTransferObject
+class Data extends SpatieData
 {
-    public string $id;
-
-    public string $type;
-
-    public AttributesData $attributes;
+    public function __construct(
+        public string $id,
+        public string $type,
+        public AttributesData $attributes
+    ) {
+    }
 }
