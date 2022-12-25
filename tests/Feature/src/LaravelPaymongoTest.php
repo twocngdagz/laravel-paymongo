@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\RequestBodyData as WebhookRequestBodyData;
-use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
 use function Pest\Faker\faker;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as SourceRequestBodyData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\RequestBodyData as WebhookRequestBodyData;
+use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
 
@@ -84,23 +84,23 @@ it('should_create_webhook_to_paymongo', function () {
     config(['paymongo.public_key' => faker()->uuid]);
     config(['paymongo.secret_key' => faker()->uuid]);
     $url = faker()->url;
-    $id = 'hook_' . faker()->uuid;
+    $id = 'hook_'.faker()->uuid;
     $response = [
         'data' => [
             'id' => $id,
-            'type' => "webhook",
+            'type' => 'webhook',
             'attributes' => [
                 'livemode' => false,
                 'secret_key' => faker()->uuid,
                 'status' => 'enabled',
                 'url' => 'http://test.com',
                 'events' => [
-                    'source.chargeable'
+                    'source.chargeable',
                 ],
-                'created_at' =>  now()->timestamp,
-                'updated_at' =>  now()->timestamp,
-            ]
-        ]
+                'created_at' => now()->timestamp,
+                'updated_at' => now()->timestamp,
+            ],
+        ],
     ];
     Http::fake([
         '*' => Http::response($response, 200),
@@ -109,11 +109,11 @@ it('should_create_webhook_to_paymongo', function () {
         'data' => [
             'attributes' => [
                 'events' => [
-                    WebhookEventsEnum::SOURCE_CHARGEABLE->value
-                    ],
-                'url' => faker()->url
-            ]
-        ]
+                    WebhookEventsEnum::SOURCE_CHARGEABLE->value,
+                ],
+                'url' => faker()->url,
+            ],
+        ],
     ]);
     $response = LaravelPaymongo::createWebhook($body);
     expect($response->data->id)->toBe($id);
