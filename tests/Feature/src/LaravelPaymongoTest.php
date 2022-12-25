@@ -77,3 +77,7 @@ it('it_should_create_a_source_resource_on_a_successful_response', function () {
     expect($responseData->data->attributes->redirect->failed)->toBe($failedUrl);
     expect($responseData->data->id)->toBe($uuid);
 });
+
+it('should_list_all_webhooks', function () {
+
+});
