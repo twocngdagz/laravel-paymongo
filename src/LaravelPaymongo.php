@@ -3,10 +3,10 @@
 namespace Twocngdagz\LaravelPaymongo;
 
 use Illuminate\Support\Facades\Http;
-use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as SourceRequestBodyData;
-use Twocngdagz\LaravelPaymongo\DataObjects\Source\Response\ResponseData as SourceResponseData;
-use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as WebhookRequestBodyData;
-use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData as WebhookResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as CreateSourceRequestBodyData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Source\Response\ResponseData as CreateSourceResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as CreateWebhookRequestBodyData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData as CreateWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 
 class LaravelPaymongo
@@ -27,7 +27,7 @@ class LaravelPaymongo
         }
     }
 
-    public function createSource(SourceRequestBodyData $body): SourceResponseData
+    public function createSource(CreateSourceRequestBodyData $body): CreateSourceResponseData
     {
         $path = 'sources';
         $this->init();
@@ -38,10 +38,10 @@ class LaravelPaymongo
         ->withBasicAuth($this->publicKey, '')
         ->post($this->paymongoUrl.$path, $body->toArray());
 
-        return SourceResponseData::from($response->json());
+        return CreateSourceResponseData::from($response->json());
     }
 
-    public function createWebhook(WebhookRequestBodyData $body): WebhookResponseData
+    public function createWebhook(CreateWebhookRequestBodyData $body): CreateWebhookResponseData
     {
         $path = 'webhooks';
         $this->init();
@@ -52,6 +52,18 @@ class LaravelPaymongo
         ->withBasicAuth($this->secretKey, '')
         ->post($this->paymongoUrl.$path, $body->toArray());
 
-        return WebhookResponseData::from($response->json());
+        return CreateWebhookResponseData::from($response->json());
+    }
+
+    public function listWebhooks()
+    {
+        $path = 'webhooks';
+        $this->init();
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'content-typ' => 'application/json',
+        ])
+        ->withBasicAuth($this->secretKey, '')
+        ->post($this->paymongoUrl.$path, $body->toArray());
     }
 }
