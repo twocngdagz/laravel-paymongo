@@ -1,6 +1,6 @@
 <?php
 
-namespace Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request;
+namespace Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create;
 
 use Spatie\LaravelData\Data as SpatieData;
 

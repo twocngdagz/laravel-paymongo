@@ -4,9 +4,9 @@ namespace Twocngdagz\LaravelPaymongo;
 
 use Illuminate\Support\Facades\Http;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as SourceRequestBodyData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData as WebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Response\ResponseData as SourceResponseData;
-use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\RequestBodyData as WebhookRequestBodyData;
-use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\ResponseData as WebhookResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as WebhookRequestBodyData;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 
 class LaravelPaymongo

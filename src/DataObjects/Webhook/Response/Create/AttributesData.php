@@ -1,6 +1,6 @@
 <?php
 
-namespace Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response;
+namespace Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create;
 
 use Spatie\LaravelData\Data;
 
