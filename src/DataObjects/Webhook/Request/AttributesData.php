@@ -3,6 +3,7 @@
 namespace Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request;
 
 use Spatie\LaravelData\Data as SpatieData;
+
 class AttributesData extends SpatieData
 {
     public function __construct(

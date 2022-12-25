@@ -2,7 +2,7 @@
 
 namespace Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request;
 
-use \Spatie\LaravelData\Data as SpatieData;
+use Spatie\LaravelData\Data as SpatieData;
 
 class Data extends SpatieData
 {

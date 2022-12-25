@@ -40,7 +40,6 @@ class LaravelPaymongo
         return ResponseData::from($response->json());
     }
 
-
     public function create(WebhookRequestBodyData $body)
     {
         $path = 'webhooks';
