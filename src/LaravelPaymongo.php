@@ -4,7 +4,8 @@ namespace Twocngdagz\LaravelPaymongo;
 
 use Illuminate\Support\Facades\Http;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as SourceRequestBodyData;
-use Twocngdagz\LaravelPaymongo\DataObjects\Source\Response\ResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\ResponseData as WebhookResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Source\Response\ResponseData as SourceResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\RequestBodyData as WebhookRequestBodyData;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 
@@ -26,7 +27,7 @@ class LaravelPaymongo
         }
     }
 
-    public function createSource(SourceRequestBodyData $body): ResponseData
+    public function createSource(SourceRequestBodyData $body): SourceResponseData
     {
         $path = 'sources';
         $this->init();
@@ -37,10 +38,10 @@ class LaravelPaymongo
         ->withBasicAuth($this->publicKey, '')
         ->post($this->paymongoUrl.$path, $body->toArray());
 
-        return ResponseData::from($response->json());
+        return SourceResponseData::from($response->json());
     }
 
-    public function create(WebhookRequestBodyData $body)
+    public function createWebhook(WebhookRequestBodyData $body): WebhookResponseData
     {
         $path = 'webhooks';
         $this->init();
@@ -50,5 +51,7 @@ class LaravelPaymongo
         ])
         ->withBasicAuth($this->secretKey, '')
         ->post($this->paymongoUrl.$path, $body->toArray());
+
+        return WebhookResponseData::from($response->json());
     }
 }
