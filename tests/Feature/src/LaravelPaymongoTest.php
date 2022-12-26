@@ -123,7 +123,7 @@ it('should_return_a_webhook_response_data_after_creating_paymongo_webhook_from_a
     expect($response->data->type)->toBe('webhook');
 });
 
-it('should_return_all_registered_webhook_on_paymongo', function () {
+it('should_return_a_webhook_response_list_data_after_retrieving_all_registered_webhook_from_paymongo', function () {
     $id = 'hook_'.faker()->uuid;
     $secretKey = 'whsk_'.faker()->uuid;
 
