@@ -6,11 +6,13 @@ use Illuminate\Support\Facades\Http;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as CreateSourceRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Response\ResponseData as CreateSourceResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as CreateWebhookRequestBodyData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Update\RequestBodyData as UpdateWebhookRequestData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData as CreateWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Disable\ResponseData as DisableWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Enable\ResponseData as EnableWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\ResponseData as ListWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Retrieve\ResponseData as RetrieveWebhookResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Update\ResponseData as UpdateWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 
 class LaravelPaymongo
@@ -73,7 +75,7 @@ class LaravelPaymongo
         return ListWebhookResponseData::from($response->json());
     }
 
-    public function retrieveWebhook($webhookId): RetrieveWebhookResponseData
+    public function retrieveWebhook(string $webhookId): RetrieveWebhookResponseData
     {
         $path = 'webhooks/'.$webhookId;
         $this->init();
@@ -87,7 +89,7 @@ class LaravelPaymongo
         return RetrieveWebhookResponseData::from($response->json());
     }
 
-    public function disableWebhook($webhookId): DisableWebhookResponseData
+    public function disableWebhook(string $webhookId): DisableWebhookResponseData
     {
         $path = 'webhooks/'.$webhookId.'/disable';
         $this->init();
@@ -101,7 +103,7 @@ class LaravelPaymongo
         return DisableWebhookResponseData::from($response->json());
     }
 
-    public function enableWebhook($webhookId): EnableWebhookResponseData
+    public function enableWebhook(string $webhookId): EnableWebhookResponseData
     {
         $path = 'webhooks/'.$webhookId.'/enable';
         $this->init();
@@ -113,5 +115,19 @@ class LaravelPaymongo
             ->get($this->paymongoUrl.$path, []);
 
         return EnableWebhookResponseData::from($response->json());
+    }
+
+    public function updateWebhook(UpdateWebhookRequestData $body, string $webhookId)
+    {
+        $path = $path = 'webhooks/'.$webhookId;
+        $this->init();
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'content-typ' => 'application/json',
+        ])
+            ->withBasicAuth($this->secretKey, '')
+            ->get($this->paymongoUrl.$path, $body->toArray());
+
+        return UpdateWebhookResponseData::from($response->json());
     }
 }
