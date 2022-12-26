@@ -15,7 +15,7 @@ use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
 
-it('should_throw_paymongo_missing_key_exception_when_api_keys_are_not_set', function () {
+it('should throw paymongo missing key exception when api keys are not set', function () {
     config(['paymongo.public_key' => null]);
     config(['paymongo.secret_key' => null]);
     $body = SourceRequestBodyData::from([
@@ -34,7 +34,7 @@ it('should_throw_paymongo_missing_key_exception_when_api_keys_are_not_set', func
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoMissingKeyException::class);
 
-it('it_should_return_a_response_source_data_after_creating_paymongo_source_from_a_valid_request_body', function () {
+it('it should return a response source data after creating paymongo source from a valid request body', function () {
     config(['paymongo.public_key' => faker()->uuid]);
     config(['paymongo.secret_key' => faker()->uuid]);
     $uuid = faker()->uuid;
@@ -87,7 +87,7 @@ it('it_should_return_a_response_source_data_after_creating_paymongo_source_from_
     expect($responseData->data->id)->toBe($uuid);
 });
 
-it('should_return_a_webhook_response_data_after_creating_paymongo_webhook_from_a_valid_request_body', function () {
+it('should return a webhook response data after creating paymongo webhook from a valid request body', function () {
     config(['paymongo.public_key' => faker()->uuid]);
     config(['paymongo.secret_key' => faker()->uuid]);
     $url = faker()->url;
@@ -128,7 +128,7 @@ it('should_return_a_webhook_response_data_after_creating_paymongo_webhook_from_a
     expect($response->data->type)->toBe('webhook');
 });
 
-it('should_return_a_webhook_response_list_data_after_retrieving_all_registered_webhook_from_paymongo', function () {
+it('should return a webhook response list data after retrieving all registered webhook from paymongo', function () {
     $id = 'hook_'.faker()->uuid;
     $secretKey = 'whsk_'.faker()->uuid;
 
@@ -177,7 +177,7 @@ it('should_return_a_webhook_response_list_data_after_retrieving_all_registered_w
     expect($response->data->first()->attributes->secret_key)->toBe($secretKey);
 });
 
-it('should_return_webhook_response_get_data_after_retrieving_a_webhook_from_paymongo', function () {
+it('should return webhook response get data after retrieving a webhook from paymongo', function () {
     $id = 'hook_'.faker()->uuid;
     $secretKey = 'whsk_'.faker()->uuid;
     $response = [
@@ -205,7 +205,7 @@ it('should_return_webhook_response_get_data_after_retrieving_a_webhook_from_paym
     expect($response->data->id)->toBe($id);
 });
 
-it('should_return_webhook_response_disable_data_after_disabling_a_webhook_from_paymongo', function () {
+it('should return webhook response disable data after disabling a webhook from paymongo', function () {
     $id = 'hook_'.faker()->uuid;
     $secretKey = 'whsk_'.faker()->uuid;
     $response = [
@@ -233,7 +233,7 @@ it('should_return_webhook_response_disable_data_after_disabling_a_webhook_from_p
     expect($response->data->attributes->status)->toBe('disabled');
 });
 
-it('should_return_webhook_response_enable_data_after_enabling_a_webhook_from_paymongo', function () {
+it('should return webhook response enable data after enabling a webhook from paymongo', function () {
     $id = 'hook_'.faker()->uuid;
     $secretKey = 'whsk_'.faker()->uuid;
     $response = [
@@ -262,7 +262,7 @@ it('should_return_webhook_response_enable_data_after_enabling_a_webhook_from_pay
     expect($response->data->attributes->status)->toBe('enabled');
 });
 
-it('should_return_wewbhook_response_update_data_after_updating_a_webhook_from_paymongo', function () {
+it('should return wewbhook response update data after updating a webhook from paymongo', function () {
     $id = 'hook_'.faker()->uuid;
     $secretKey = 'whsk_'.faker()->uuid;
     $requestBody = UpdateWebhookRequestBody::from([
