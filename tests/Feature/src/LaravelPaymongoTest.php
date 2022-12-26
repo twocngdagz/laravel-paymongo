@@ -6,6 +6,7 @@ use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as Sou
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as WebhookRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\ResponseData as WebhookListResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Retrieve\ResponseData as RetrieveWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
@@ -170,4 +171,32 @@ it('should_return_a_webhook_response_list_data_after_retrieving_all_registered_w
     expect($response)->toBeInstanceOf(WebhookListResponseData::class);
     expect($response->data)->toHaveCount(2);
     expect($response->data->first()->attributes->secret_key)->toBe($secretKey);
+});
+
+it('should_return_webhook_response_get_data_after_retrieving_a_webhook_from_paymongo', function () {
+    $id = 'hook_'.faker()->uuid;
+    $secretKey = 'whsk_'.faker()->uuid;
+    $response = [
+        'data' => [
+            'id' => $id,
+            'type' => 'webhook',
+            'attributes' => [
+                'livemode' => false,
+                'secret_key' => $secretKey,
+                'status' => 'enabled',
+                'url' => faker()->url,
+                'events' => [
+                    'payment.paid',
+                ],
+                'created_at' => now()->timestamp,
+                'updated_at' => now()->timestamp,
+            ],
+        ],
+    ];
+    Http::fake([
+        '*' => Http::response($response, 200),
+    ]);
+    $response = LaravelPaymongo::retrieveWebhook('hook_j9WUB2sbQ8h9xJCn37wb4pb8');
+    expect($response)->toBeInstanceOf(RetrieveWebhookResponseData::class);
+    expect($response->data->id)->toBe($id);
 });
