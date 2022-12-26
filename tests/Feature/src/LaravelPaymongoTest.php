@@ -168,5 +168,6 @@ it('should_return_all_registered_webhook_on_paymongo', function () {
 
     expect($response->data->first()->id)->toBe($id);
     expect($response)->toBeInstanceOf(WebhookListResponseData::class);
+    expect($response->data)->toHaveCount(2);
     expect($response->data->first()->attributes->secret_key)->toBe($secretKey);
 });
