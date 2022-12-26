@@ -5,6 +5,7 @@ use function Pest\Faker\faker;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as SourceRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as WebhookRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\ResponseData as WebhookListResponseData;
 use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
@@ -166,5 +167,6 @@ it('should_return_all_registered_webhook_on_paymongo', function () {
     $response = LaravelPaymongo::listWebhooks();
 
     expect($response->data->first()->id)->toBe($id);
+    expect($response)->toBeInstanceOf(WebhookListResponseData::class);
     expect($response->data->first()->attributes->secret_key)->toBe($secretKey);
 });
