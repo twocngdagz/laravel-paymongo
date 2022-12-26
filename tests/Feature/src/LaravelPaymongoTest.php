@@ -27,7 +27,7 @@ it('should_throw_paymongo_missing_key_exception_when_api_keys_are_not_set', func
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoMissingKeyException::class);
 
-it('it_should_create_a_source_resource_on_a_successful_response', function () {
+it('it_should_return_a_response_source_data_after_creating_paymongo_source_from_a_valid_request_body', function () {
     config(['paymongo.public_key' => faker()->uuid]);
     config(['paymongo.secret_key' => faker()->uuid]);
     $uuid = faker()->uuid;
@@ -80,7 +80,7 @@ it('it_should_create_a_source_resource_on_a_successful_response', function () {
     expect($responseData->data->id)->toBe($uuid);
 });
 
-it('should_create_webhook_to_paymongo', function () {
+it('should_return_a_webhook_response_data_after_creating_paymongo_webhook_from_a_valid_request_body', function () {
     config(['paymongo.public_key' => faker()->uuid]);
     config(['paymongo.secret_key' => faker()->uuid]);
     $url = faker()->url;
