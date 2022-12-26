@@ -5,6 +5,7 @@ use function Pest\Faker\faker;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as SourceRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as WebhookRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Disable\ResponseData as DisableWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\ResponseData as WebhookListResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Retrieve\ResponseData as RetrieveWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
@@ -199,4 +200,32 @@ it('should_return_webhook_response_get_data_after_retrieving_a_webhook_from_paym
     $response = LaravelPaymongo::retrieveWebhook('hook_j9WUB2sbQ8h9xJCn37wb4pb8');
     expect($response)->toBeInstanceOf(RetrieveWebhookResponseData::class);
     expect($response->data->id)->toBe($id);
+});
+
+it('should_return_webhook_response_disable_data_after_disabling_a_webhook_from_paymongo', function () {
+    $id = 'hook_'.faker()->uuid;
+    $secretKey = 'whsk_'.faker()->uuid;
+    $response = [
+        'data' => [
+            'id' => $id,
+            'type' => 'webhook',
+            'attributes' => [
+                'livemode' => false,
+                'secret_key' => $secretKey,
+                'status' => 'disabled',
+                'url' => faker()->url,
+                'events' => [
+                    'payment.paid',
+                ],
+                'created_at' => now()->timestamp,
+                'updated_at' => now()->timestamp,
+            ],
+        ],
+    ];
+    Http::fake([
+        '*' => Http::response($response, 200),
+    ]);
+    $response = LaravelPaymongo::disableWebhook('hook_j9WUB2sbQ8h9xJCn37wb4pb8');
+    expect($response)->toBeInstanceOf(DisableWebhookResponseData::class);
+    expect($response->data->attributes->status)->toBe('disabled');
 });
