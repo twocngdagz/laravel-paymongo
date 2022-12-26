@@ -7,6 +7,7 @@ use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as Cre
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Response\ResponseData as CreateSourceResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as CreateWebhookRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData as CreateWebhookResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Disable\ResponseData as DisableWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\ResponseData as ListWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Retrieve\ResponseData as RetrieveWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
@@ -83,5 +84,19 @@ class LaravelPaymongo
             ->get($this->paymongoUrl.$path, []);
 
         return RetrieveWebhookResponseData::from($response->json());
+    }
+
+    public function disableWebhook($webhookId): DisableWebhookResponseData
+    {
+        $path = 'webhooks/'.$webhookId.'/disable';
+        $this->init();
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'content-typ' => 'application/json',
+        ])
+            ->withBasicAuth($this->secretKey, '')
+            ->get($this->paymongoUrl.$path, []);
+
+        return DisableWebhookResponseData::from($response->json());
     }
 }
