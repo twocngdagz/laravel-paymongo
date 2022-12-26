@@ -6,6 +6,7 @@ use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as Sou
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as WebhookRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Create\ResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Disable\ResponseData as DisableWebhookResponseData;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Enable\ResponseData as EnableWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\ResponseData as WebhookListResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Retrieve\ResponseData as RetrieveWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
@@ -228,4 +229,33 @@ it('should_return_webhook_response_disable_data_after_disabling_a_webhook_from_p
     $response = LaravelPaymongo::disableWebhook('hook_j9WUB2sbQ8h9xJCn37wb4pb8');
     expect($response)->toBeInstanceOf(DisableWebhookResponseData::class);
     expect($response->data->attributes->status)->toBe('disabled');
+});
+
+it('should_return_webhook_response_enable_data_after_enabling_a_webhook_from_paymongo', function () {
+    $id = 'hook_'.faker()->uuid;
+    $secretKey = 'whsk_'.faker()->uuid;
+    $response = [
+        'data' => [
+            'id' => $id,
+            'type' => 'webhook',
+            'attributes' => [
+                'livemode' => false,
+                'secret_key' => $secretKey,
+                'status' => 'enabled',
+                'url' => faker()->url,
+                'events' => [
+                    'payment.paid',
+                ],
+                'created_at' => now()->timestamp,
+                'updated_at' => now()->timestamp,
+            ],
+        ],
+    ];
+    Http::fake([
+        '*' => Http::response($response, 200),
+    ]);
+
+    $response = LaravelPaymongo::enableWebhook('hook_j9WUB2sbQ8h9xJCn37wb4pb8');
+    expect($response)->toBeInstanceOf(EnableWebhookResponseData::class);
+    expect($response->data->attributes->status)->toBe('enabled');
 });
