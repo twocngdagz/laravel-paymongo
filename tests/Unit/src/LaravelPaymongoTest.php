@@ -322,7 +322,7 @@ it('should throw an exception if request is using unsupported type of source', f
         'data' => [
             'attributes' => [
                 'amount' => 10000,
-                'currency' => 'USD',
+                'currency' => 'PHP',
                 'type' => 'foodpanda',
                 'redirect' => [
                     'success' => 'http://demo-store.test/hub',
