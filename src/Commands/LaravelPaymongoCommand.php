@@ -3,6 +3,8 @@
 namespace Twocngdagz\LaravelPaymongo\Commands;
 
 use Illuminate\Console\Command;
+use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\Data;
+use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
 use Twocngdagz\LaravelPaymongo\Jobs\Webhooks\DisableWebhook;
 
@@ -10,26 +12,27 @@ class LaravelPaymongoCommand extends Command
 {
     public $signature = 'laravel-paymongo';
 
-    public $description = 'This will register the webhooks in paymongo and delete all previous registered webhooks.';
+    public $description = 'This will register the webhooks in paymongo and disable all previous registered webhooks.';
 
     public function handle(): int
     {
-        $response = LaravelPaymongo::listWebhooks();
+        $data = $this->retrieveWebhooksSourceChargeablePaymentPaidPaymentFailedEvents();
+        $webhookData = Data::collection($data);
 
-        if ($response->data->count()) {
-            $this->line('We found '.$response->data->count().' webhook that is registered!');
-            $webhooks = collect($response->data->toArray())->map(function ($webhook) {
+        if ($webhookData->count()) {
+            $this->line('We found '.$webhookData->count().' webhook that is registered!');
+            $webhooks = collect($webhookData->toArray())->map(function ($webhook) {
                 return [$webhook['id'], $webhook['attributes']['url']];
             });
             $this->table(
                 ['ID', 'URL'],
                 $webhooks
             );
-            $continue = $this->confirm('Are you sure you want to continue in deleting this registered webhook?');
+            $continue = $this->confirm('Are you sure you want to continue in disabling this registered webhook?');
             if (! $continue) {
                 return self::SUCCESS;
             }
-            $response->data->each(function ($webhook) {
+            $webhookData->each(function ($webhook) {
                 DisableWebhook::dispatch($webhook->id);
             });
         }
@@ -37,5 +40,14 @@ class LaravelPaymongoCommand extends Command
         $this->comment('All done');
 
         return self::SUCCESS;
+    }
+
+    public function retrieveWebhooksSourceChargeablePaymentPaidPaymentFailedEvents()
+    {
+        $response = LaravelPaymongo::listWebhooks();
+
+        return array_filter($response->data->toArray(), function ($webhook) {
+            return in_array($webhook['attributes']['events'][0], array_column(WebhookEventsEnum::cases(), 'value'));
+        });
     }
 }
