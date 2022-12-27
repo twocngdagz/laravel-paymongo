@@ -1,12 +1,15 @@
 <?php
 
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
+use Twocngdagz\LaravelPaymongo\Jobs\Webhooks\DisableWebhook;
 use function Pest\Faker\faker;
 use Symfony\Component\Console\Command\Command;
 use Twocngdagz\LaravelPaymongo\Commands\LaravelPaymongoCommand;
 
 it('should_display_correct_output', function () {
     Bus::fake();
+
     $webhookResponseDisable = [
         'data' => [
             'id' => 'hook_'.faker()->uuid,
@@ -63,6 +66,7 @@ it('should_display_correct_output', function () {
         '*' => Http::response($webhookResponseDisable, 200),
         '*' => Http::response($webhookResponseDisable, 200),
     ]);
+
     $this->artisan(LaravelPaymongoCommand::class)
         ->expectsOutput('We found 2 webhook that is registered!')
         ->expectsTable([
@@ -74,4 +78,5 @@ it('should_display_correct_output', function () {
         ])
         ->expectsConfirmation('Are you sure you want to continue in deleting this registered webhook?', 'Yes')
         ->assertExitCode(Command::SUCCESS);
+    Bus::assertDispatched(DisableWebhook::class, 2);
 });
