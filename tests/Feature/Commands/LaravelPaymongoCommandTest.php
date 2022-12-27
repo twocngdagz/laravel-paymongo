@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
-use Twocngdagz\LaravelPaymongo\Jobs\Webhooks\DisableWebhook;
 use function Pest\Faker\faker;
 use Symfony\Component\Console\Command\Command;
 use Twocngdagz\LaravelPaymongo\Commands\LaravelPaymongoCommand;
+use Twocngdagz\LaravelPaymongo\Jobs\Webhooks\DisableWebhook;
 
 it('should_display_correct_output', function () {
     Bus::fake();
