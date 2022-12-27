@@ -49,78 +49,48 @@ class LaravelPaymongo
 
     public function createWebhook(CreateWebhookRequestBodyData $body): CreateWebhookResponseData
     {
-        $path = 'webhooks';
-        $this->init();
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'content-typ' => 'application/json',
-        ])
-        ->withBasicAuth($this->secretKey, '')
-        ->post($this->paymongoUrl.$path, $body->toArray());
+        $path = $this->paymongoUrl.'webhooks';
+        $response = $this->request(url: $path, method: 'post', body: $body->toArray());
 
         return CreateWebhookResponseData::from($response->json());
     }
 
     public function listWebhooks(): ListWebhookResponseData
     {
-        $path = 'webhooks';
-        $this->init();
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'content-typ' => 'application/json',
-        ])
-        ->withBasicAuth($this->secretKey, '')
-        ->get($this->paymongoUrl.$path, []);
+        $path = $this->paymongoUrl.'webhooks';
+        $response = $this->request(url: $path, method: 'get');
 
         return ListWebhookResponseData::from($response->json());
     }
 
     public function retrieveWebhook(string $webhookId): RetrieveWebhookResponseData
     {
-        $path = 'webhooks/'.$webhookId;
-        $this->init();
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'content-typ' => 'application/json',
-        ])
-            ->withBasicAuth($this->secretKey, '')
-            ->get($this->paymongoUrl.$path, []);
+        $path = $this->paymongoUrl.'webhooks/'.$webhookId;
+        $response = $this->request(url: $path, method: 'get');
 
         return RetrieveWebhookResponseData::from($response->json());
     }
 
     public function disableWebhook(string $webhookId): DisableWebhookResponseData
     {
-        $path = 'webhooks/'.$webhookId.'/disable';
-        $this->init();
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'content-type' => 'application/json',
-        ])
-            ->withBasicAuth($this->secretKey, '')
-            ->post($this->paymongoUrl.$path, []);
+        $path = $this->paymongoUrl.'webhooks/'.$webhookId.'/disable';
+        $response = $this->request(url: $path, method: 'post');
 
         return DisableWebhookResponseData::from($response->json());
     }
 
     public function enableWebhook(string $webhookId): EnableWebhookResponseData
     {
-        $path = 'webhooks/'.$webhookId.'/enable';
-        $this->init();
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'content-typ' => 'application/json',
-        ])
-            ->withBasicAuth($this->secretKey, '')
-            ->get($this->paymongoUrl.$path, []);
+        $path = $this->paymongoUrl.'webhooks/'.$webhookId.'/enable';
+        $response = $this->request(url: $path, method: 'post');
 
         return EnableWebhookResponseData::from($response->json());
     }
 
     public function updateWebhook(UpdateWebhookRequestData $body, string $webhookId): UpdateWebhookResponseData
     {
-        $path = $path = 'webhooks/'.$webhookId;
-        $response = $this->request(url: $path, method: 'get', body: $body->toArray());
+        $path = $this->paymongoUrl.'webhooks/'.$webhookId;
+        $response = $this->request(url: $path, method: 'put', body: $body->toArray());
 
         return UpdateWebhookResponseData::from($response->json());
     }
