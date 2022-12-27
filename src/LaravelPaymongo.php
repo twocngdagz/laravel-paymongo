@@ -120,14 +120,20 @@ class LaravelPaymongo
     public function updateWebhook(UpdateWebhookRequestData $body, string $webhookId): UpdateWebhookResponseData
     {
         $path = $path = 'webhooks/'.$webhookId;
-        $this->init();
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'content-typ' => 'application/json',
-        ])
-            ->withBasicAuth($this->secretKey, '')
-            ->get($this->paymongoUrl.$path, $body->toArray());
+        $response = $this->request(url: $path, method: 'get', body: $body->toArray());
 
         return UpdateWebhookResponseData::from($response->json());
+    }
+
+    protected function request(string $url, string $method, array $body = [])
+    {
+        $this->init();
+
+        return Http::withHeaders([
+            'accept' => 'application/json',
+            'content-type' => 'application/json',
+        ])
+            ->withBasicAuth($this->secretKey, '')
+            ->{$method}($url, $body)->throw();
     }
 }
