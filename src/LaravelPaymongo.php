@@ -35,14 +35,8 @@ class LaravelPaymongo
 
     public function createSource(CreateSourceRequestBodyData $body): CreateSourceResponseData
     {
-        $path = 'sources';
-        $this->init();
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'content-type' => 'application/json',
-        ])
-        ->withBasicAuth($this->publicKey, '')
-        ->post($this->paymongoUrl.$path, $body->toArray());
+        $path = $this->paymongoUrl.'sources';
+        $response = $this->request(url: $path, method: 'post', body: $body->toArray());
 
         return CreateSourceResponseData::from($response->json());
     }
