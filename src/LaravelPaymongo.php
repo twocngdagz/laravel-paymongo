@@ -13,7 +13,12 @@ use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Enable\ResponseData 
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\ResponseData as ListWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Retrieve\ResponseData as RetrieveWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Update\ResponseData as UpdateWebhookResponseData;
+use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoBadRequestException;
+use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoForbiddenException;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
+use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoNotFoundException;
+use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoServerErrorException;
+use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoUnauthorizedException;
 
 class LaravelPaymongo
 {
@@ -92,12 +97,22 @@ class LaravelPaymongo
     protected function request(string $url, string $method, array $body = [])
     {
         $this->init();
-
-        return Http::withHeaders([
-            'accept' => 'application/json',
-            'content-type' => 'application/json',
-        ])
-            ->withBasicAuth($this->secretKey, '')
-            ->{$method}($url, $body)->throw();
+        try {
+            return Http::withHeaders([
+                'accept' => 'application/json',
+                'content-type' => 'application/json',
+            ])
+                ->withBasicAuth($this->secretKey, '')
+                ->{$method}($url, $body)->throw();
+        } catch (\Throwable $e) {
+            match ($e->getCode()) {
+                400 => throw new PaymongoBadRequestException($e->getMessage()),
+                401 => throw new PaymongoUnauthorizedException($e->getMessage()),
+                403 => throw new PaymongoForbiddenException($e->getMessage()),
+                404 => throw new PaymongoNotFoundException($e->getMessage()),
+                500 => throw new PaymongoServerErrorException($e->getMessage()),
+                default => throw $e,
+            };
+        }
     }
 }

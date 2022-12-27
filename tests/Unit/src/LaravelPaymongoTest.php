@@ -12,6 +12,7 @@ use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Lists\ResponseData a
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Retrieve\ResponseData as RetrieveWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Update\ResponseData as UpdateWebhookResponseData;
 use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
+use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoBadRequestException;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
 
@@ -298,3 +299,37 @@ it('should return wewbhook response update data after updating a webhook from pa
     expect($response)->toBeInstanceOf(UpdateWebhookResponseData::class);
     expect($response->data->attributes->events)->toContain(WebhookEventsEnum::SOURCE_CHARGEABLE->value);
 });
+
+it('it should throw a bad request exception if request is using unsupported currency', function () {
+    $body = SourceRequestBodyData::from([
+        'data' => [
+            'attributes' => [
+                'amount' => 10000,
+                'currency' => 'USD',
+                'type' => 'gcash',
+                'redirect' => [
+                    'success' => 'http://demo-store.test/hub',
+                    'failed' => 'http://demo-store.test/hub',
+                ],
+            ],
+        ],
+    ]);
+    LaravelPaymongo::createSource($body);
+})->throws(PaymongoBadRequestException::class);
+
+it('should throw an exception if request is using unsupported type of source', function () {
+    $body = SourceRequestBodyData::from([
+        'data' => [
+            'attributes' => [
+                'amount' => 10000,
+                'currency' => 'USD',
+                'type' => 'foodpanda',
+                'redirect' => [
+                    'success' => 'http://demo-store.test/hub',
+                    'failed' => 'http://demo-store.test/hub',
+                ],
+            ],
+        ],
+    ]);
+    LaravelPaymongo::createSource($body);
+})->throws(PaymongoBadRequestException::class);
