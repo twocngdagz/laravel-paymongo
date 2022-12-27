@@ -229,8 +229,8 @@ it('should return webhook response disable data after disabling a webhook from p
         '*' => Http::response($response, 200),
     ]);
     $response = LaravelPaymongo::disableWebhook('hook_j9WUB2sbQ8h9xJCn37wb4pb8');
-    expect($response)->toBeInstanceOf(DisableWebhookResponseData::class);
-    expect($response->data->attributes->status)->toBe('disabled');
+    expect($response)->toBeInstanceOf(DisableWebhookResponseData::class)
+        ->and($response->data->attributes->status)->toBe('disabled');
 });
 
 it('should return webhook response enable data after enabling a webhook from paymongo', function () {

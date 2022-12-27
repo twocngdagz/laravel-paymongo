@@ -95,10 +95,10 @@ class LaravelPaymongo
         $this->init();
         $response = Http::withHeaders([
             'accept' => 'application/json',
-            'content-typ' => 'application/json',
+            'content-type' => 'application/json',
         ])
             ->withBasicAuth($this->secretKey, '')
-            ->get($this->paymongoUrl.$path, []);
+            ->post($this->paymongoUrl.$path, []);
 
         return DisableWebhookResponseData::from($response->json());
     }
@@ -117,7 +117,7 @@ class LaravelPaymongo
         return EnableWebhookResponseData::from($response->json());
     }
 
-    public function updateWebhook(UpdateWebhookRequestData $body, string $webhookId)
+    public function updateWebhook(UpdateWebhookRequestData $body, string $webhookId): UpdateWebhookResponseData
     {
         $path = $path = 'webhooks/'.$webhookId;
         $this->init();
