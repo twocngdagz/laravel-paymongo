@@ -334,6 +334,19 @@ it('it should throw a bad request exception if request is using unsupported curr
 })->throws(PaymongoBadRequestException::class, 'PHP is the only currency supported at the moment.');
 
 it('should throw an exception if request is using unsupported type of source', function () {
+    $response = [
+        'errors' => [
+            [
+                'code' => 'parameter_invalid',
+                'detail' => 'The source_type passed foodpanda is invalid.',
+                'source' => [
+                    'pointer' => 'source_type',
+                    'attribute' => 'source_type',
+                ],
+            ],
+
+        ],
+    ];
     $body = SourceRequestBodyData::from([
         'data' => [
             'attributes' => [
@@ -346,6 +359,9 @@ it('should throw an exception if request is using unsupported type of source', f
                 ],
             ],
         ],
+    ]);
+    Http::fake([
+        '*' => Http::response($response, 400),
     ]);
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoBadRequestException::class, 'The source_type passed foodpanda is invalid.');
