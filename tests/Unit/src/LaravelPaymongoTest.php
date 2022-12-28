@@ -365,3 +365,69 @@ it('should throw an exception if request is using unsupported type of source', f
     ]);
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoBadRequestException::class, 'The source_type passed foodpanda is invalid.');
+
+it('should throw an exception if amount is below minimum', function () {
+    $response = [
+        'errors' => [
+            [
+                'code' => 'parameter_invalid',
+                'detail' => 'The value for amount cannot be less than 10000.',
+                'source' => [
+                    'pointer' => 'amount',
+                    'attribute' => 'amount',
+                ],
+            ],
+
+        ],
+    ];
+    $body = SourceRequestBodyData::from([
+        'data' => [
+            'attributes' => [
+                'amount' => 0,
+                'currency' => 'PHP',
+                'type' => 'gcash',
+                'redirect' => [
+                    'success' => 'http://demo-store.test/hub',
+                    'failed' => 'http://demo-store.test/hub',
+                ],
+            ],
+        ],
+    ]);
+    Http::fake([
+        '*' => Http::response($response, 400),
+    ]);
+    LaravelPaymongo::createSource($body);
+})->throws(PaymongoBadRequestException::class, 'The value for amount cannot be less than 10000.');
+
+it('should throw an exception if the value of redirect success is blank', function () {
+    $response = [
+        'errors' => [
+            [
+                'code' => 'parameter_blank',
+                'detail' => 'The value for redirect.success cannot be blank.',
+                'source' => [
+                    'pointer' => 'redirect.success',
+                    'attribute' => 'success',
+                ],
+            ],
+
+        ],
+    ];
+    $body = SourceRequestBodyData::from([
+        'data' => [
+            'attributes' => [
+                'amount' => 10000,
+                'currency' => 'PHP',
+                'type' => 'gcash',
+                'redirect' => [
+                    'success' => '',
+                    'failed' => 'http://demo-store.test/hub',
+                ],
+            ],
+        ],
+    ]);
+    Http::fake([
+        '*' => Http::response($response, 400),
+    ]);
+    LaravelPaymongo::createSource($body);
+})->throws(PaymongoBadRequestException::class, 'The value for redirect.success cannot be blank.');

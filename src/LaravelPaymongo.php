@@ -105,7 +105,7 @@ class LaravelPaymongo
             ])
                 ->withBasicAuth($this->secretKey, '')
                 ->{$method}($url, $body)->throw();
-        } catch (\Throwable $e) {
+        } catch (RequestException $e) {
             $errorMessage = $this->extractErrorMessage($e);
 
             match ($e->getCode()) {
