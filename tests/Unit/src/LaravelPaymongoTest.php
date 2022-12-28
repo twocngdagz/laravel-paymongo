@@ -301,6 +301,19 @@ it('should return wewbhook response update data after updating a webhook from pa
 });
 
 it('it should throw a bad request exception if request is using unsupported currency', function () {
+    $response = [
+        'errors' => [
+            [
+                'code' => 'parameter_invalid',
+                'detail' => 'PHP is the only currency supported at the moment.',
+                'source' => [
+                    'pointer' => 'currency',
+                    'attribute' => 'currency',
+                ],
+            ],
+
+        ],
+    ];
     $body = SourceRequestBodyData::from([
         'data' => [
             'attributes' => [
@@ -314,8 +327,11 @@ it('it should throw a bad request exception if request is using unsupported curr
             ],
         ],
     ]);
+    Http::fake([
+        '*' => Http::response($response, 400),
+    ]);
     LaravelPaymongo::createSource($body);
-})->throws(PaymongoBadRequestException::class);
+})->throws(PaymongoBadRequestException::class, 'PHP is the only currency supported at the moment.');
 
 it('should throw an exception if request is using unsupported type of source', function () {
     $body = SourceRequestBodyData::from([
@@ -332,4 +348,4 @@ it('should throw an exception if request is using unsupported type of source', f
         ],
     ]);
     LaravelPaymongo::createSource($body);
-})->throws(PaymongoBadRequestException::class);
+})->throws(PaymongoBadRequestException::class, 'The source_type passed foodpanda is invalid.');

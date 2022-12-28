@@ -2,6 +2,7 @@
 
 namespace Twocngdagz\LaravelPaymongo;
 
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as CreateSourceRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Response\ResponseData as CreateSourceResponseData;
@@ -105,14 +106,26 @@ class LaravelPaymongo
                 ->withBasicAuth($this->secretKey, '')
                 ->{$method}($url, $body)->throw();
         } catch (\Throwable $e) {
+            $errorMessage = $this->extractErrorMessage($e);
+
             match ($e->getCode()) {
-                400 => throw new PaymongoBadRequestException($e->getMessage()),
-                401 => throw new PaymongoUnauthorizedException($e->getMessage()),
-                403 => throw new PaymongoForbiddenException($e->getMessage()),
-                404 => throw new PaymongoNotFoundException($e->getMessage()),
-                500 => throw new PaymongoServerErrorException($e->getMessage()),
+                400 => throw new PaymongoBadRequestException($errorMessage),
+                401 => throw new PaymongoUnauthorizedException($errorMessage),
+                403 => throw new PaymongoForbiddenException($errorMessage),
+                404 => throw new PaymongoNotFoundException($errorMessage),
+                500 => throw new PaymongoServerErrorException($errorMessage),
                 default => throw $e,
             };
         }
+    }
+
+    protected function extractErrorMessage(RequestException $e): ?string
+    {
+        $errors = $e->response->json();
+        if (! is_array($errors)) {
+            return null;
+        }
+
+        return $errors['errors'][0]['detail'] ?? null;
     }
 }
