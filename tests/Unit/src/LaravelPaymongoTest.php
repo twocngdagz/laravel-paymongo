@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoUnauthorizedException;
 use function Pest\Faker\faker;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as SourceRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as WebhookRequestBodyData;
@@ -15,6 +14,7 @@ use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Response\Update\ResponseData 
 use Twocngdagz\LaravelPaymongo\Enums\WebhookEventsEnum;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoBadRequestException;
 use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoMissingKeyException;
+use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoUnauthorizedException;
 use Twocngdagz\LaravelPaymongo\Facades\LaravelPaymongo;
 
 it('should throw paymongo missing key exception when api keys are not set', function () {
@@ -500,5 +500,4 @@ it('should throw an exception when using invalid keys when creating a source', f
 })->throws(PaymongoUnauthorizedException::class, 'API key invalid_key is invalid.');
 
 it('error', function () {
-
-})
+});
