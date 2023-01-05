@@ -499,5 +499,30 @@ it('should throw an exception when using invalid keys when creating a source', f
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoUnauthorizedException::class, 'API key invalid_key is invalid.');
 
-it('error', function () {
-});
+it('it should throws an exception when using public key on url that required secret key', function () {
+    $publicKey = config('paymongo.public_key');
+    config(['paymongo.secret_key' => $publicKey]);
+    $response = [
+        'errors' => [
+            [
+                'code' => 'secret_key_required',
+                'detail' => 'Please use your secret key to access this resource. Go to https://developers.paymongo.com/docs/authentication to know more about our API authentication.',
+            ],
+
+        ],
+    ];
+    $body = WebhookRequestBodyData::from([
+        'data' => [
+            'attributes' => [
+                'events' => [
+                    WebhookEventsEnum::SOURCE_CHARGEABLE->value,
+                ],
+                'url' => faker()->url,
+            ],
+        ],
+    ]);
+    Http::fake([
+        '*' => Http::response($response, 401),
+    ]);
+    $response = LaravelPaymongo::createWebhook($body);
+})->throws(PaymongoUnauthorizedException::class, 'Please use your secret key to access this resource.');
