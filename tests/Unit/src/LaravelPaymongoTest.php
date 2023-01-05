@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
+use Twocngdagz\LaravelPaymongo\Exceptions\PaymongoUnauthorizedException;
 use function Pest\Faker\faker;
 use Twocngdagz\LaravelPaymongo\DataObjects\Source\Request\RequestBodyData as SourceRequestBodyData;
 use Twocngdagz\LaravelPaymongo\DataObjects\Webhook\Request\Create\RequestBodyData as WebhookRequestBodyData;
@@ -300,7 +301,7 @@ it('should return wewbhook response update data after updating a webhook from pa
     expect($response->data->attributes->events)->toContain(WebhookEventsEnum::SOURCE_CHARGEABLE->value);
 });
 
-it('it should throw a bad request exception if request is using unsupported currency', function () {
+it('it should throw a bad request exception if request is using unsupported currency when creating a source', function () {
     $response = [
         'errors' => [
             [
@@ -333,7 +334,7 @@ it('it should throw a bad request exception if request is using unsupported curr
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoBadRequestException::class, 'PHP is the only currency supported at the moment.');
 
-it('should throw an exception if request is using unsupported type of source', function () {
+it('should throw an exception if request is using unsupported type of source when creating a source', function () {
     $response = [
         'errors' => [
             [
@@ -366,7 +367,7 @@ it('should throw an exception if request is using unsupported type of source', f
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoBadRequestException::class, 'The source_type passed foodpanda is invalid.');
 
-it('should throw an exception if amount is below minimum', function () {
+it('should throw an exception if amount is below minimum when creating a source', function () {
     $response = [
         'errors' => [
             [
@@ -399,7 +400,7 @@ it('should throw an exception if amount is below minimum', function () {
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoBadRequestException::class, 'The value for amount cannot be less than 10000.');
 
-it('should throw an exception if the value of redirect success is blank', function () {
+it('should throw an exception if the value of redirect success is blank when creating a source', function () {
     $response = [
         'errors' => [
             [
@@ -431,3 +432,73 @@ it('should throw an exception if the value of redirect success is blank', functi
     ]);
     LaravelPaymongo::createSource($body);
 })->throws(PaymongoBadRequestException::class, 'The value for redirect.success cannot be blank.');
+
+it('shouild throw an exception if the value of redirect fail is blank when creating a source', function () {
+    $response = [
+        'errors' => [
+            [
+                'code' => 'parameter_blank',
+                'detail' => 'The value for redirect.failed cannot be blank.',
+                'source' => [
+                    'pointer' => 'redirect.failed',
+                    'attribute' => 'failed',
+                ],
+            ],
+
+        ],
+    ];
+    $body = SourceRequestBodyData::from([
+        'data' => [
+            'attributes' => [
+                'amount' => 10000,
+                'currency' => 'PHP',
+                'type' => 'gcash',
+                'redirect' => [
+                    'success' => 'http://demo-store.test/hub',
+                    'failed' => '',
+                ],
+            ],
+        ],
+    ]);
+    Http::fake([
+        '*' => Http::response($response, 400),
+    ]);
+    LaravelPaymongo::createSource($body);
+})->throws(PaymongoBadRequestException::class, 'The value for redirect.failed cannot be blank.');
+
+it('should throw an exception when using invalid keys when creating a source', function () {
+    config(['paymongo.public_key' => 'invalid_key']);
+    config(['paymongo.secret_key' => 'invalid_key']);
+
+    $response = [
+        'errors' => [
+            [
+                'code' => 'api_key_invalid',
+                'detail' => 'API key invalid_key is invalid. Go to https://developers.paymongo.com/docs/authentication to know more about our API authentication.',
+            ],
+
+        ],
+    ];
+
+    $body = SourceRequestBodyData::from([
+        'data' => [
+            'attributes' => [
+                'amount' => 10000,
+                'currency' => 'PHP',
+                'type' => 'gcash',
+                'redirect' => [
+                    'success' => 'http://demo-store.test/hub',
+                    'failed' => '',
+                ],
+            ],
+        ],
+    ]);
+    Http::fake([
+        '*' => Http::response($response, 401),
+    ]);
+    LaravelPaymongo::createSource($body);
+})->throws(PaymongoUnauthorizedException::class, 'API key invalid_key is invalid.');
+
+it('error', function () {
+
+})
