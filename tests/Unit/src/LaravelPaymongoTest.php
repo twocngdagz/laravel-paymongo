@@ -104,7 +104,7 @@ it('should return a webhook response data after creating paymongo webhook from a
                 'status' => 'enabled',
                 'url' => 'http://test.com',
                 'events' => [
-                    'source.chargeable',
+                    WebhookEventsEnum::SOURCE_CHARGEABLE->value,
                 ],
                 'created_at' => now()->timestamp,
                 'updated_at' => now()->timestamp,
@@ -145,7 +145,7 @@ it('should return a webhook response list data after retrieving all registered w
                     'status' => 'enabled',
                     'url' => faker()->url,
                     'events' => [
-                        'payment.paid',
+                        WebhookEventsEnum::PAYMENT_PAID->value,
                     ],
                     'created_at' => now()->timestamp,
                     'updated_at' => now()->timestamp,
@@ -160,7 +160,7 @@ it('should return a webhook response list data after retrieving all registered w
                     'status' => 'enabled',
                     'url' => faker()->url,
                     'events' => [
-                        'source.chargeable',
+                        WebhookEventsEnum::SOURCE_CHARGEABLE->value,
                     ],
                     'created_at' => now()->timestamp,
                     'updated_at' => now()->timestamp,
@@ -192,7 +192,7 @@ it('should return webhook response get data after retrieving a webhook from paym
                 'status' => 'enabled',
                 'url' => faker()->url,
                 'events' => [
-                    'payment.paid',
+                    WebhookEventsEnum::PAYMENT_PAID->value,
                 ],
                 'created_at' => now()->timestamp,
                 'updated_at' => now()->timestamp,
@@ -220,7 +220,7 @@ it('should return webhook response disable data after disabling a webhook from p
                 'status' => 'disabled',
                 'url' => faker()->url,
                 'events' => [
-                    'payment.paid',
+                    WebhookEventsEnum::PAYMENT_PAID->value,
                 ],
                 'created_at' => now()->timestamp,
                 'updated_at' => now()->timestamp,
@@ -248,7 +248,7 @@ it('should return webhook response enable data after enabling a webhook from pay
                 'status' => 'enabled',
                 'url' => faker()->url,
                 'events' => [
-                    'payment.paid',
+                    WebhookEventsEnum::PAYMENT_PAID->value,
                 ],
                 'created_at' => now()->timestamp,
                 'updated_at' => now()->timestamp,
