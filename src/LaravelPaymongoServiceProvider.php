@@ -17,9 +17,15 @@ class LaravelPaymongoServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-paymongo')
-            ->hasConfigFile()
+            ->hasConfigFile([
+                'paymongo',
+                'webhook-client',
+            ])
+            /*
             ->hasViews()
+            */
             ->hasMigration('create_laravel-paymongo_table')
+            ->hasRoute('web')
             ->hasCommand(LaravelPaymongoCommand::class);
     }
 }
